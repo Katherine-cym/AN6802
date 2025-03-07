@@ -1,11 +1,33 @@
 from flask import Flask, request, render_template
-
 app = Flask(__name__)
-
-@app.route("/", methods = ["POST","GET"])
+@app.route("/",methods=["GET","POST"])
 def index():
-    return (render_template('index.html'))
-        
+    return(render_template("index.html"))
 
-if __name__ == "__main__" :
+@app.route("/main",methods=["GET","POST"])
+def main():
+    name = request.form.get("name")    
+    return(render_template("main.html",name=name))
+
+@app.route("/ethical_test",methods=["GET","POST"])
+def ethical_test():   
+    return(render_template("ethical_test.html"))
+'''
+@app.route("/test_result",methods=["GET","POST"])
+def test_result():  
+    answer = request.form.get("answer")
+    if answer =="false": 
+        return(render_template("pass.html"))
+    elif answer == "true":
+        return(render_template("fail.html"))
+'''
+@app.route("/test_result",methods=["POST","GET"])
+def test_result():
+    answer=request.form.get("answer")
+    if answer=="false":
+        return(render_template("pass.html"))
+    elif answer=="true":
+        return(render_template("fail.html"))
+
+if __name__ == "__main__":
     app.run()
