@@ -1,10 +1,17 @@
 from flask import Flask, request, render_template
 import sqlite3
 import datetime
+import google.generativeai as genai
+import os
+
+
 
 app = Flask(__name__)
 
 flag = 1
+api = "AIzaSyCWPKr6v5uY_-BZvrOBQgrLB6JLNuZMTuU"
+model = genai.GenerativeModel('gemini-1.5-flash')
+genai.configure(api_key = api)
 
 @app.route("/",methods=["GET","POST"])
 def index():
@@ -34,6 +41,16 @@ def foodexp():
 @app.route("/ethical_test",methods=["GET","POST"])
 def ethical_test():   
     return(render_template("ethical_test.html"))
+
+@app.route("/FAQ",methods=["GET","POST"])
+def FAQ():   
+    return(render_template("FAQ.html"))
+
+@app.route("/FAQ1",methods=["GET","POST"])
+def FAQ1():   
+    r = model.generate_content("Factors for Profit")
+
+    return(render_template("FAQ1.html", r = r.candidates[0].content.parts[0].text))
 
 @app.route("/userLog",methods=["GET","POST"])
 def userLog():   
